@@ -129,5 +129,12 @@ void STEPPER_COUNTER_HANDLER(void)
         TIM_Cmd(STEPPER_COUNTER_TIMER, DISABLE);
         TIM_ITConfig(STEPPER_COUNTER_TIMER, TIM_IT_Update, DISABLE);
         stepper_busy = 0;
+		
+		GPIO_InitTypeDef GPIO_InitStructure;
+		GPIO_InitStructure.GPIO_Pin = STEPPER_PWM_GPIO_PIN;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(STEPPER_PWM_GPIO_PORT, &GPIO_InitStructure);
+		GPIO_ResetBits(STEPPER_PWM_GPIO_PORT, STEPPER_PWM_GPIO_PIN);
     }
 }

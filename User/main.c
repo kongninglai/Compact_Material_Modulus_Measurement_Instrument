@@ -20,16 +20,17 @@ int main(void)
 	Stepper_Init();
 
 	// 200 steps, 10kHZ
-	Stepper_SetDirection(0);
-	Stepper_Run(200, 10);
+	// Stepper_SetDirection(0);
+	// Stepper_Run(200, 10);
 
 	// wait for finishing
-	while (Stepper_IsBusy());
+	// while (Stepper_IsBusy());
 
 	// 400 steps, 100HZ
+	// Stepper_SetDirection(1);
 	Stepper_SetDirection(1);
-	Stepper_Run_Hz(400, 100);
-
+	Stepper_Run_Hz(1600, 100);
+	while (Stepper_IsBusy());
 	// SystemInit();
 	// delay_init(72);
 	// HX711_Init();
