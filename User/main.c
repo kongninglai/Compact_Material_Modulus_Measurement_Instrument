@@ -7,14 +7,13 @@
 #include "HX711.h"
 #include "PWM.h"
 int value;
-float weight;
-int32_t reset;
+
+int reset;
 u8 buff[30];
 
-float Weights=100.0;  //100g
-int32_t Weights_100=8493860;  //100g
 
 uint8_t Key_Pressed;
+uint8_t PWM_Enabled;
 #define KEY_DIR 0x1
 #define KEY_ENA 0x2
 
@@ -22,20 +21,35 @@ int main(void)
 { 
 	SystemInit();
 	delay_init(72);
+	Serial_Init();
 	Key_Init();
 	LED_Init();
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	PWM_Steps(800);
+	HX711_Init();
+	delay_ms(2000);
+	reset = HX711_GetData();
 	PWM_Init();
 	TIM_Cmd(TIM4,ENABLE);
+	PWM_Enabled = 0;
 	while (1)
 	{
+		value = HX711_GetData() - reset;
 		Key_Pressed = Key_Scan();
+		if (value >= 0){
+			Serial_Printf("+%d\r\n", value);
+		} else {
+			Serial_Printf("-%d\r\n", -value);
+		}
 		if (Key_Pressed == KEY_DIR){
 			LED_DIR_Turn();
 		}
 		if (Key_Pressed == KEY_ENA){
-			PWM_Start();
+			if (PWM_Enabled) {
+				PWM_Enabled = 0;
+				PWM_Stop();
+			} else {
+				PWM_Enabled = 1;
+				PWM_Start();
+			}
 		}
 	}
 	// SystemInit();

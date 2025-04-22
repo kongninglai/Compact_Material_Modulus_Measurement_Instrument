@@ -15,7 +15,11 @@
 
 #define HX711_DT					GPIO_ReadInputDataBit(HX711_DT_GPIO_PORT, HX711_DT_GPIO_PIN)
 
+extern int HX711_Data_Reset;
+extern volatile int HX711_Data_Real;
+extern volatile uint8_t HX711_Data_Ready;
 
 void HX711_Init(void);
+void HX711_Reset(void);
 unsigned long HX711_GetData(void);
 #endif
