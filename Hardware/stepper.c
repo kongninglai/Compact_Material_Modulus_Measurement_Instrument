@@ -52,10 +52,10 @@ static void TIM1_PWM_Config(uint32_t frequency_khz)
     TIM_TimeBaseInit(STEPPER_PWM_TIMER, &TIM_TimeBaseStructure);
 
     TIM_OCInitTypeDef TIM_OCInitStructure;
-    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStructure.TIM_Pulse = cycle / 2;
-    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     STEPPER_PWM_CHANNEL_INIT(STEPPER_PWM_TIMER, &TIM_OCInitStructure);
 
     TIM_SelectMasterSlaveMode(STEPPER_PWM_TIMER, TIM_MasterSlaveMode_Enable);
@@ -121,20 +121,20 @@ void Stepper_Run_Hz(uint32_t step_count, uint32_t frequency_hz)
 
 void STEPPER_COUNTER_HANDLER(void)
 {
-    if (TIM_GetITStatus(STEPPER_COUNTER_TIMER, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(STEPPER_COUNTER_TIMER, TIM_IT_Update);
-        TIM_CtrlPWMOutputs(STEPPER_PWM_TIMER, DISABLE);
-        TIM_Cmd(STEPPER_PWM_TIMER, DISABLE);
-        TIM_Cmd(STEPPER_COUNTER_TIMER, DISABLE);
-        TIM_ITConfig(STEPPER_COUNTER_TIMER, TIM_IT_Update, DISABLE);
-        stepper_busy = 0;
+    // if (TIM_GetITStatus(STEPPER_COUNTER_TIMER, TIM_IT_Update) != RESET)
+    // {
+    //     TIM_ClearITPendingBit(STEPPER_COUNTER_TIMER, TIM_IT_Update);
+    //     TIM_CtrlPWMOutputs(STEPPER_PWM_TIMER, DISABLE);
+    //     TIM_Cmd(STEPPER_PWM_TIMER, DISABLE);
+    //     TIM_Cmd(STEPPER_COUNTER_TIMER, DISABLE);
+    //     TIM_ITConfig(STEPPER_COUNTER_TIMER, TIM_IT_Update, DISABLE);
+    //     stepper_busy = 0;
 		
-		GPIO_InitTypeDef GPIO_InitStructure;
-		GPIO_InitStructure.GPIO_Pin = STEPPER_PWM_GPIO_PIN;
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-		GPIO_Init(STEPPER_PWM_GPIO_PORT, &GPIO_InitStructure);
-		GPIO_ResetBits(STEPPER_PWM_GPIO_PORT, STEPPER_PWM_GPIO_PIN);
-    }
+	// 	GPIO_InitTypeDef GPIO_InitStructure;
+	// 	GPIO_InitStructure.GPIO_Pin = STEPPER_PWM_GPIO_PIN;
+	// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	// 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	// 	GPIO_Init(STEPPER_PWM_GPIO_PORT, &GPIO_InitStructure);
+	// 	GPIO_ResetBits(STEPPER_PWM_GPIO_PORT, STEPPER_PWM_GPIO_PIN);
+    // }
 }
