@@ -11,7 +11,7 @@ int value;
 int reset;
 u8 buff[30];
 
-
+uint8_t RxData;
 uint8_t Key_Pressed;
 uint8_t PWM_Enabled;
 #define KEY_DIR 0x1
@@ -39,6 +39,22 @@ int main(void)
 		} else {
 			Serial_Printf("-%d\r\n", -value);
 		}
+		// if (Serial_GetRxFlag() == 1)
+ 		// {
+		// 	RxData = Serial_GetRxData();
+		// 	if (RxData == KEY_DIR){
+		// 		LED_DIR_Turn();
+		// 	}
+		// 	if (RxData == KEY_ENA){
+		// 		if (PWM_Enabled) {
+		// 			PWM_Enabled = 0;
+		// 			PWM_Stop();
+		// 		} else {
+		// 			PWM_Enabled = 1;
+		// 			PWM_Start();
+		// 		}
+		// 	}
+		// }
 		if (Key_Pressed == KEY_DIR){
 			LED_DIR_Turn();
 		}
